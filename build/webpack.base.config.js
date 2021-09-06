@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 13:40:53
- * @LastEditTime: 2021-08-31 14:24:25
+ * @LastEditTime: 2021-09-06 11:12:08
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\notes\webpack.config.js
@@ -11,6 +11,10 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 // VueLoaderPlugin
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+// css 提取
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+// css 压缩
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 // 
 module.exports = {
   mode: "development",
@@ -43,12 +47,11 @@ module.exports = {
           loader: 'babel-loader'
       },
       { test: /\.vue$/, use: ['vue-loader'] },
-      { test: /\.css$/, use: ["style-loader", "css-loader"] },
       {
-        test: /\.s[ac]ss$/,
+        test: /\.(sa|sc|c)ss$/,
         use: [
-          // 将 JS 字符串生成为 style 节点
-          'style-loader',
+          // css 提取为单独的css文件
+          MiniCssExtractPlugin.loader,
           // 将 CSS 转化成 CommonJS 模块
           'css-loader',
           // 将 Sass 编译成 CSS
@@ -85,7 +88,11 @@ module.exports = {
       filename: 'index.html',
       template: 'index.html',
     }),
-    // 
-    new VueLoaderPlugin()
+    // 加载vue文件
+    new VueLoaderPlugin(),
+    // css 抽取
+    new MiniCssExtractPlugin({
+      filename: 'static/css/[name].css'
+    })
   ],
 }
