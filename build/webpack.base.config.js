@@ -1,12 +1,14 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 13:40:53
- * @LastEditTime: 2021-09-06 11:12:08
+ * @LastEditTime: 2021-09-07 14:38:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\notes\webpack.config.js
  */
 const path = require('path')
+// 
+const webpack = require('webpack')
 // HtmlWebpackPlugin
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 // VueLoaderPlugin
@@ -15,6 +17,8 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 // css 压缩
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+// 加载测试配置
+const envConfig = require('../config/test.env')
 // 
 module.exports = {
   mode: "development",
@@ -84,6 +88,11 @@ module.exports = {
     ],
   },
   plugins: [
+    // 添加自定义全局变量
+    new webpack.DefinePlugin({
+      envConfig: JSON.stringify(envConfig)
+    }),
+    // 自动生成html
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'index.html',
